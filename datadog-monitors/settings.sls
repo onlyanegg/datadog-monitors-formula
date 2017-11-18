@@ -5,3 +5,5 @@
 {%- set datadog_monitors = datadog_monitors_defaults.datadog_monitors %}
 {%- do salt.slsutil.update(datadog_monitors, datadog_monitors_pillar) %}
 {%- do salt.slsutil.update(datadog_monitors, datadog_monitors_grains) %}
+
+#{{ datadog_monitors }}
