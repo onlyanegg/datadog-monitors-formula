@@ -1,6 +1,6 @@
 {% from 'datadog-monitors/settings.sls' import datadog_monitors with context -%}
 
-{%- if datadog_monitors.completely_manage | lower() == 'true' %}
+{%- if datadog_monitors.manage_completely | lower() == 'true' %}
   {%- set goal_monitor_list = datadog_monitors.monitors.keys() %}
   {%- set current_monitor_list = salt['datadog.get_all_monitors'](
       api_key=datadog_monitors.api_key,
