@@ -1,4 +1,4 @@
-{%- from 'datadog-monitors/settings.sls' import  datadog-monitors with context -%}
+{% from 'datadog-monitors/settings.sls' import datadog-monitors with context -%}
 
 {%- if datadog-monitors.completely_manage | lower() == 'true' %}
   {%- set goal_monitor_list = datadog-monitors.monitors.keys() %}
