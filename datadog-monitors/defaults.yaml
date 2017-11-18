@@ -1,2 +1,2 @@
-datadog-monitors:
+datadog_monitors:
   manage_completely: False

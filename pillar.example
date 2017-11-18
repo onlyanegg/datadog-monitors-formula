@@ -1,4 +1,4 @@
-datadog-monitors:
+datadog_monitors:
   api_key:
   app_key:
   manage_completely: True  # Delete all monitors not managed by this formula

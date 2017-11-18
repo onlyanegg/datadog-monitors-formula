@@ -1,10 +1,10 @@
-{% from 'datadog-monitors/settings.sls' import datadog-monitors with context -%}
+{% from 'datadog-monitors/settings.sls' import datadog_monitors with context -%}
 
-{%- if datadog-monitors.completely_manage | lower() == 'true' %}
-  {%- set goal_monitor_list = datadog-monitors.monitors.keys() %}
+{%- if datadog_monitors.completely_manage | lower() == 'true' %}
+  {%- set goal_monitor_list = datadog_monitors.monitors.keys() %}
   {%- set current_monitor_list = salt['datadog.get_all_monitors'](
-      api_key=datadog-monitors.api_key,
-      app_key=datadog-monitors.app_key
+      api_key=datadog_monitors.api_key,
+      app_key=datadog_monitors.app_key
     )
   %}
 
@@ -19,17 +19,17 @@
 {{ monitor }}_monitor_absent:
   datadog.monitor_absent:
     - name: {{ monitor }}
-    - api_key: {{ datadog-monitors.api_key }}
-    - app_key: {{ datadog-monitors.app_key }}
+    - api_key: {{ datadog_monitors.api_key }}
+    - app_key: {{ datadog_monitors.app_key }}
   {%- endfor %}
 {%- endif %}
 
-{%- for monitor, attributes in datadog-monitors.monitors.iteritems() %}
+{%- for monitor, attributes in datadog_monitors.monitors.iteritems() %}
 {{ monitor }}_monitor_managed:
   datadog.monitor_managed:
     - name: {{ monitor }}
-    - api_key: {{ datadog-monitors.api_key }}
-    - app_key: {{ datadog-monitors.app_key }}
+    - api_key: {{ datadog_monitors.api_key }}
+    - app_key: {{ datadog_monitors.app_key }}
     - type: {{ attributes.type }}
     - query: {{ attributes.query }}
     - message: {{ attributes.message }}
