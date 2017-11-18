@@ -32,7 +32,7 @@
     - app_key: {{ datadog_monitors.app_key }}
     - type: {{ attributes.type }}
     - query: {{ attributes.query }}
-    - message: {{ attributes.message }}
-    - options: {{ attributes.options }}
-    - tags: {{ attributes.tags }}
+    - message: {{ attributes.message | default('') }}
+    - options: {{ attributes.options | default({}) }}
+    - tags: {{ attributes.tags | default([]) }}
 {%- endfor %}
