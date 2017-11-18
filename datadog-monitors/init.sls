@@ -27,12 +27,12 @@
 {%- for monitor, attributes in datadog_monitors.monitors.iteritems() %}
 {{ monitor }}_monitor_managed:
   datadog.monitor_managed:
-    - name: {{ monitor }}
+    - name: '{{ monitor }}'
     - api_key: {{ datadog_monitors.api_key }}
     - app_key: {{ datadog_monitors.app_key }}
-    - type: {{ attributes.type }}
+    - type: '{{ attributes.type }}'
     - query: {{ attributes.query }}
-    - message: {{ attributes.message | default('') }}
+    - message: '{{ attributes.message | default('') }}'
     - options: {{ attributes.options | default({}) }}
     - tags: {{ attributes.tags | default([]) }}
 {%- endfor %}
