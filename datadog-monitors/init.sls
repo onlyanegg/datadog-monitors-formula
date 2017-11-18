@@ -31,7 +31,7 @@
     - api_key: {{ datadog_monitors.api_key }}
     - app_key: {{ datadog_monitors.app_key }}
     - type: '{{ attributes.type }}'
-    - query: {{ attributes.query }}
+    - query: '{{ attributes.query }}'
     - message: '{{ attributes.message | default('') }}'
     - options: {{ attributes.options | default({}) }}
     - tags: {{ attributes.tags | default([]) }}
