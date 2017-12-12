@@ -16,7 +16,7 @@
   {%- endfor %}
 
   {%- for monitor in remove_monitor_list %}
-{{ monitor }}_monitor_absent:
+{{ monitor }}:
   datadog.monitor_absent:
     - name: {{ monitor }}
     - api_key: {{ datadog_monitors.api_key }}
@@ -25,7 +25,7 @@
 {%- endif %}
 
 {%- for monitor, attributes in datadog_monitors.monitors.iteritems() %}
-{{ monitor }}_monitor_managed:
+{{ monitor }}:
   datadog.monitor_managed:
     - name: '{{ monitor }}'
     - api_key: {{ datadog_monitors.api_key }}
