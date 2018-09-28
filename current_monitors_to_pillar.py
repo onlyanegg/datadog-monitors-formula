@@ -16,6 +16,7 @@ import pdb
 
 # 3rd party libs
 import yaml
+from yaml import SafeDumper
 import datadog
 
 def main():
@@ -94,6 +95,9 @@ def _output_monitors(monitors, args):
 
     _escape_jinja_tags(monitors)
 
+    # Overwrite the SafeDumper's default representation for type(None)
+    SafeDumper.add_representer(type(None), _represent_none)
+
     monitors_dict = {}
     attribute_list = ['type', 'query', 'message', 'tags', 'options']
     for monitor in monitors:
@@ -104,8 +108,9 @@ def _output_monitors(monitors, args):
 
     pillar['datadog_monitors']['monitors'] = monitors_dict
 
+    pdb.set_trace()
     with open(args.output, 'w') as f:
-        f.write(yaml.safe_dump(pillar))
+        yaml.safe_dump(pillar, f)
 
 def _escape_jinja_tags(monitors):
     '''
@@ -119,6 +124,19 @@ def _escape_jinja_tags(monitors):
             r"{{'{{'}}\1{{'}}'}}",
             monitor['message']
         )
+
+def _represent_none(self, _):
+    '''
+    Some fields (eg. no_data_timeframe) are rendered by pyyaml as `null` which
+    is not accepted by datadog as a valid field. Here we define the
+    representation of type(None) as 'None'.
+
+    References:
+    https://stackoverflow.com/questions/37200150/can-i-dump-blank-instead-of-null-in-yaml-pyyaml
+    https://pyyaml.org/wiki/PyYAMLDocumentation
+    '''
+
+    return self.represent_scalar('tag:yaml.org,2002:null', '')
 
 class InvocationError(Exception):
     '''

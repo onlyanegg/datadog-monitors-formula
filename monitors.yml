@@ -1,0 +1,1235 @@
+datadog_monitors:
+  api_key: 3dcf6c049d8d84fbb523add00dab7bde
+  app_key: 26d394eada8ca1b6d5c37b55bd2f756b693bb689
+  manage_completely: false
+  monitors:
+    / usage:
+      message: '@itatsf@certain.com '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 17179869184.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.used{device:/dev/mapper/vg0-lv_root,environment:prod}
+        by {host} > 17179869184
+      tags: ['*']
+      type: metric alert
+    /data02 Disk Space in Pod Helpdesk:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 17179869184.0, warning: 16106127360.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.used{device:/dev/xvdf,pod:helpdesk} > 17179869184
+      tags: []
+      type: metric alert
+    /data02 Free space:
+      message: '@itatsf@certain.com  @pagerduty'
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 10
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 2150000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{device:/dev/xvdf,environment:prod}
+        by {host} < 2150000000
+      tags: ['*']
+      type: metric alert
+    Clock in sync with NTP:
+      message: 'Triggers if any hosts clock goes out of sync with the time given by
+        NTP. The offset threshold is configured in the Agents ntp.yaml file. Please
+        read the [KB article](https://help.datadoghq.com/hc/en-us/articles/204282095-Network-Time-Protocol-NTP-Offset-Issues)
+        on NTP Offset issues for more details on cause and resolution. '
+      options:
+        locked: false
+        new_host_delay: 300
+        notify_audit: false
+        notify_no_data: false
+        silenced: {}
+      query: '"ntp.in_sync".over("environment:prod").by("host").last(2).count_by_status()'
+      tags: []
+      type: service check
+    EC2 Instance failed instance status check:
+      message: '@itatsf@certain.com '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 0.0}
+        timeout_h: 0
+      query: avg(last_1h):avg:aws.ec2.status_check_failed{environment:prod,role:mamsft,role:managedaa,role:bulkapi}
+        by {host} > 0
+      tags: ['*']
+      type: metric alert
+    EC2 hosts status:
+      message: 'EC2 Instance checks has failed. @itatsf@certain.com @pagerduty-Datadog '
+      options:
+        escalation_message: EC2 Instance check continues to fail
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 10
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"aws.ec2.host_status".over("*").by("host").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Free Disk Bamboo:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 4000000000.0, warning: 5000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian03-LogVol00}
+        <= 4000000000
+      tags: ['*']
+      type: metric alert
+    Free Disk Confluence:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 4000000000.0, warning: 5000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian02-LogVol00}
+        <= 4000000000
+      tags: ['*']
+      type: metric alert
+    Free Disk Fisheye:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 2000000000.0, warning: 3000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian04-LogVol00}
+        <= 2000000000
+      tags: ['*']
+      type: metric alert
+    Free Disk Hydra Logs:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 2000000000.0, warning: 3000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian06-LogVol00}
+        <= 2000000000
+      tags: ['*']
+      type: metric alert
+    Free Disk Hydra MySQL:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 2000000000.0, warning: 3000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian05-LogVol00}
+        <= 2000000000
+      tags: ['*']
+      type: metric alert
+    Free Disk Hydra root:
+      message: '@itatsf@certain.com @pagerduty-Datadog'
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 2000000000.0, warning: 3000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian-lv_root}
+        <= 2000000000
+      tags: ['*']
+      type: metric alert
+    Free Disk Jira:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 4000000000.0, warning: 5000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian01-LogVol00}
+        <= 4000000000
+      tags: ['*']
+      type: metric alert
+    Free Disk SVN:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 4000000000.0, warning: 5000000000.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.free{host:hydra.certain.com,device:/dev/mapper/vg_atlassian00-LogVol00}
+        <= 4000000000
+      tags: ['*']
+      type: metric alert
+    HTTPS DeloitteConference URL:
+      message: '@clee@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:deloitteconference").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Ma Midterm http check:
+      message: Ma Midterm process is down, causing http_check to fail. @itatsf@certain.com  @pagerduty
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 1, warning: 1}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:marketingautomation_msft","role:mamsft").by("host","instance","url").last(2).count_by_status()'
+      tags: []
+      type: service check
+    Ma Midterm process:
+      message: 'Ma Midterm process  @itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:ma_midterm","role:mamsft").last(1).count_by_status()'
+      tags: []
+      type: service check
+    NTP Offset:
+      message: '@itatsf@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: true
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: false
+        silenced: {}
+        thresholds: {critical: 0.1}
+        timeout_h: 0
+      query: avg(last_5m):avg:ntp.offset{environment:prod} by {host} >= 0.1
+      tags: ['*']
+      type: metric alert
+    NTP Offset 200ms:
+      message: '@itatsf@certain.com @jmatharu@certain.com @rmanville@certain.com @smachado@certain.com
+        @koshiro@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: true
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: false
+        silenced: {}
+        thresholds: {critical: 0.2}
+        timeout_h: 0
+      query: avg(last_5m):avg:ntp.offset{environment:prod} by {host} >= 0.2
+      tags: ['*']
+      type: metric alert
+    Pod Condor Master Scheduler  check:
+      message: '@itatsf@certain.com   @pagerduty'
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"certain_software_scripts_test_condorq.sh".over("environment:prod","role:plat").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod  ETL Service check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("host:ame101.pod6.prod.va.certainaws.com","process:etl").by("host","process").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod CPU utilization:
+      message: '@itatsf@certain.com @pagerduty-Datadog'
+      options:
+        escalation_message: ''
+        evaluation_delay: 900
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 80.0, warning: 70.0}
+        timeout_h: 0
+      query: avg(last_1h):avg:aws.ec2.cpuutilization{environment:prod,!role:akm} by
+        {name} > 80
+      tags: ['*']
+      type: metric alert
+    Prod ELB Un-Healthy hosts:
+      message: "{{'{{'}}#is_alert{{'}}'}}\n Check ELB in Pod and restart + Init if\
+        \ certainApp.\n{{'{{'}}/is_alert{{'}}'}} \n\n{{'{{'}}#is_recovery{{'}}'}}\n\
+        ELB Pod CertainApp has recovered.\n{{'{{'}}/is_recovery{{'}}'}}  @itatsf@certain.com\
+        \ @pagerduty-Datadog"
+      options:
+        escalation_message: ELB is still unhealthy.
+        evaluation_delay: 900
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 30
+        notify_audit: true
+        notify_no_data: true
+        renotify_interval: 30
+        require_full_window: false
+        silenced: {}
+        thresholds: {critical: 1.0, warning: 0.0}
+        timeout_h: 0
+      query: min(last_30m):avg:aws.elb.un_healthy_host_count{environment:prod,!pod:pod8}
+        by {host} > 1
+      tags: ['*']
+      type: metric alert
+    Prod EventSream  Service Certain check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("instance:certain_session","role:evstr").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod EventSream  Service Content check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("instance:content_session","role:evstr").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod EventSream  Service Decision check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("instance:decision_session","role:evstr").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod EventSream  Service Feeder check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("instance:feeder_session","role:evstr").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod EventSream Service Auth check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("instance:auth_session","role:evstr").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod EventSream Service Launcher check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("instance:launcher_session","role:evstr").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod External Service check for Plat:
+      message: '@itatsf@certain.com @pagerduty'
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"tomcat.can_connect".over("environment:prod","role:plat").exclude("host:base101.pod1.local.ca.packer_build","host:base101.pod1.prod.va.packer_build").by("host","instance").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Memory Usage:
+      message: '@itatsf@certain.com  @pagerduty-Datadog '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 20.0, warning: 30.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.mem.used{environment:prod} <= 20
+      tags: ['*']
+      type: query alert
+    Prod SSO DB Docker Service Check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 3}
+        timeout_h: 0
+      query: '"docker.service_up".over("environment:prod","role:ssodb").by("host").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod SSO DB running containers:
+      message: '@itatsf@certain.com @slack-datadog '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 6.0}
+        timeout_h: 0
+      query: sum(last_5m):avg:docker.containers.running{environment:prod,role:ssodb}
+        by {host} < 6
+      tags: ['*']
+      type: metric alert
+    Prod SSO Data02 File system:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 75161927680.0, warning: 69793218560.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.used{device:/dev/xvdf,role:sso} by {host}
+        > 75161927680
+      tags: []
+      type: metric alert
+    Prod SSO Mgr Docker Service Check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 3}
+        timeout_h: 0
+      query: '"docker.service_up".over("environment:prod","role:ssomgr").by("host").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod SSO Mgr running containers:
+      message: '@itatsf@certain.com @slack-datadog '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 10.0}
+        timeout_h: 0
+      query: sum(last_5m):avg:docker.containers.running{environment:prod,role:ssomgr}
+        by {host} < 10
+      tags: ['*']
+      type: metric alert
+    Prod SSO Root File system:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 17179869184.0, warning: 16106127360.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:system.disk.used{role:sso,device:/dev/mapper/vg0-lv_root}
+        by {host} > 17179869184
+      tags: []
+      type: metric alert
+    Prod Service AME check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 3, ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:ame","role:ame").by("host","process").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service CertainApp check for APP:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"tomcat.can_connect".over("environment:prod","role:app").exclude("host:base101.pod1.local.ca.packer_build","host:base101.pod1.prod.va.packer_build").by("host","instance").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service CertainExternal Check:
+      message: '@itatsf@certain.com  @pagerduty-Datadog @pagerduty-Datadog '
+      options:
+        escalation_message: certainExternal check still failing
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 30
+        silenced: {}
+        thresholds: {critical: 3, ok: 2}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:certainexternal","role:plat").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service CertainJob check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:certain_job","role:plat").exclude("host:plat101.pod7.prod.va.certainaws.com").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service ClamdAV check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 5, ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:clamd").by("host","process").last(6).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Freshclam check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 3, ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:freshclam").by("host","process").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Interanl check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:internal_service","role:plat").exclude("host:base101.pod1.prod.va.packer_build").by("host","process").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Jahia check:
+      message: '@itatsf@certain.com   @pagerduty'
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"tomcat.can_connect".over("environment:prod","role:jahia").exclude("host:jahia102.pod1.prod.va.certainaws.com","host:base101.pod1.local.ca.packer_build","host:base101.pod1.prod.va.packer_build","host:jahia101.pod2.prod.va.certainaws.com").by("host","instance").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Logstash check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 5, ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:logstash").exclude("host:base101.pod1.prod.va.packer_build","host:cmm101.pod1.prod.va.certainaws.com","host:cmm102.pod1.prod.va.certainaws.com").by("host","process").last(6).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service NTP check:
+      message: 'One of the server NTP service is down!  @itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 20
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 5, ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:ntp").exclude("host:ame101.pod6.prod.va.certainaws.com").by("host","process").last(6).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service OSSEC-HIDS-agent:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3, warning: 2}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:ossec").exclude("host:mgmt102.pod1.prod.va.certainaws.com","host:base101.pod1.prod.va.packer_build","host:cmm101.pod1.prod.va.certainaws.com","host:cmm102.pod1.prod.va.certainaws.com","host:cmm101.gen.dev.or.certainaws.com","host:ame101.pod6.prod.va.certainaws.com","pod:pod8","host:cie101.gen.qa.or.certainaws.com","host:cie101.gen.hdev.or.certainaws.com","host:app106.pod2.prod.va.certainaws.com","host:app107.pod2.prod.va.certainaws.com","host:app108.pod2.prod.va.certainaws.com","host:app109.pod2.prod.va.certainaws.com").by("host","process").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Polkitd check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 20
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 1, warning: 1}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:polkitd").exclude("host:web103.pod1.prod.va.certainaws.com","host:mgmt101.pod1.local.ca.tyler.com","host:mgmt101.pod1.prod.va.certainaws.com").by("host","process").last(2).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Postfix check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 20
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 1, warning: 1}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:postfix").by("host","process").last(2).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service RecurringBillingExt check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:recurringbillingext","role:plat").exclude("host:base101.pod1.prod.va.packer_build").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSH check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 30
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 1, warning: 1}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:ssh").by("host","process").last(2).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSOAdvance check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:sso_advance","pod:pod2","role:plat").exclude("name:plat101.pod0.prod.va.certainaws.com","host:plat102.pod0.prod.va.certainaws.com","host:base101.pod1.prod.va.packer_build").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSOMicrosoft check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:sso_microsoft","pod:pod6","role:plat").exclude("host:base101.pod1.prod.va.packer_build").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSONIST check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:sso_nist","pod:pod3","role:plat").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSOOracle check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:oracle_sso","pod:pod5","role:plat").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSOReed check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:sso_reed","pod:pod4","role:plat").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSOTI check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:sso_ti","pod:pod2","role:plat").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service SSOUSAA check:
+      message: '@itatsf@certain.com  '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"http.can_connect".over("environment:prod","instance:sso_usaa","pod:pod3","role:plat").by("host","instance","url").last(4).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Salt-Minion check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 20
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 1, warning: 1}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:salt-minion").exclude("host:cmm102.pod1.prod.va.certainaws.com","host:ame101.pod6.prod.va.certainaws.com","name:cie101.gen.qa.or.certainaws.com").by("host","process").last(2).count_by_status()'
+      tags: []
+      type: service check
+    Prod Service Salt_Master check:
+      message: '@itatsf@certain.com '
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 30
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 1, warning: 1}
+        timeout_h: 0
+      query: '"process.up".over("environment:prod","process:salt-master","role:mgmt").exclude("host:mgmt102.pod1.prod.va.certainaws.com").by("host","process").last(2).count_by_status()'
+      tags: []
+      type: service check
+    Prod host live:
+      message: '@itatsf@certain.com'
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 25
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {critical: 1, ok: 1, warning: 1}
+        timeout_h: 0
+      query: '"datadog.agent.up".over("environment:prod").exclude("host:moodle101.sf.certain.com","host:app106.pod2.prod.va.certainaws.com","name:app107.pod2.prod.va.certainaws.com","host:app108.pod2.prod.va.certainaws.com","host:app109.pod2.prod.va.certainaws.com","host:i-a943dd7a","pod:pod8").by("host").last(2).count_by_status()'
+      tags: []
+      type: service check
+    Prod service CertainApp check for API:
+      message: '@itatsf@certain.com   @pagerduty'
+      options:
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 2
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        silenced: {}
+        thresholds: {ok: 3}
+        timeout_h: 0
+      query: '"tomcat.can_connect".over("environment:prod","role:api").by("host","instance").last(4).count_by_status()'
+      tags: []
+      type: service check
+    RDS CPUUtilization:
+      message: '@itatsf@certain.com  @pagerduty-Datadog @pagerduty-Datadog '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 80.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:aws.rds.cpuutilization{role:db,environment:prod} by
+        {dbname} > 80
+      tags: ['*']
+      type: metric alert
+    RDS Database Connections:
+      message: '@itatsf@certain.com  @pagerduty-Datadog @pagerduty-Datadog '
+      options:
+        escalation_message: RDS DB Connections still high
+        include_tags: true
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 30
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 120.0, warning: 80.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:aws.rds.database_connections{environment:prod,role:db}
+        by {dbname} > 120
+      tags: ['*']
+      type: metric alert
+    RDS Disk Queue Depth:
+      message: '@itatsf@certain.com  @pagerduty-Datadog @pagerduty-Datadog '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 300.0, warning: 250.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:aws.rds.disk_queue_depth{role:db,environment:prod} by
+        {dbname} > 300
+      tags: ['*']
+      type: metric alert
+    RDS Free storage:
+      message: '@itatsf@certain.com @pagerduty-Datadog @pagerduty-Datadog'
+      options:
+        escalation_message: ''
+        evaluation_delay: 120
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 1070000000.0, warning: 2150000000.0}
+        timeout_h: 0
+      query: avg(last_1h):avg:aws.rds.free_storage_space{*} by {hostname} < 1070000000
+      tags: ['*']
+      type: metric alert
+    SSO Docker Container running:
+      message: '@clee@certain.com  '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 10
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 0.9}
+        timeout_h: 0
+      query: avg(last_5m):avg:docker.containers.running{role:sso} by {docker_image}
+        <= 0.9
+      tags: ['*']
+      type: metric alert
+    System.load.5 on prod:
+      message: "We may need to take an action \n@itatsf@certain.com  @pagerduty-Datadog"
+      options:
+        escalation_message: System.load.5 on prod is still high.
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 30
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 60
+        require_full_window: false
+        silenced: {}
+        thresholds: {critical: 8.0, warning: 5.0}
+        timeout_h: 0
+      query: min(last_1h):avg:system.load.5{environment:prod,!host:base101.pod1.prod.va.packer_build}
+        by {host} > 8
+      tags: ['*']
+      type: metric alert
+    Tomcat.error.count By Host:
+      message: '@itatsf@certain.com  @pagerduty-Datadog @pagerduty-Datadog '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe:
+        notify_audit: false
+        notify_no_data: false
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 30.0, warning: 15.0}
+        timeout_h: 0
+      query: avg(last_5m):avg:tomcat.error_count{environment:prod} by {host} > 30
+      tags: ['*']
+      type: metric alert
+    Tomcat.threads.busy:
+      message: '@itatsf@certain.com @pagerduty-Datadog'
+      options:
+        escalation_message: Tomcat.threads.busy has not resolved.
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 30
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 60
+        require_full_window: false
+        silenced: {}
+        thresholds: {critical: 60.0, warning: 40.0}
+        timeout_h: 0
+      query: avg(last_1m):avg:tomcat.threads.busy{environment:prod,!host:base101.pod1.prod.va.packer_build}
+        by {host} > 60
+      tags: ['*']
+      type: metric alert
+    Tomcat.threads.busy on Role:Helpdesk By Host:
+      message: 'We may need to take an action @itatsf@certain.com '
+      options:
+        escalation_message: ''
+        include_tags: false
+        locked: false
+        new_host_delay: 300
+        no_data_timeframe: 30
+        notify_audit: false
+        notify_no_data: true
+        renotify_interval: 0
+        require_full_window: true
+        silenced: {}
+        thresholds: {critical: 40.0, warning: 35.0}
+        timeout_h: 0
+      query: avg(last_15m):avg:tomcat.threads.busy{environment:prod,pod:helpdesk}
+        by {host} > 40
+      tags: ['*']
+      type: metric alert
+    tyler_test:
+      message: ' '
+      options:
+        locked: false
+        new_host_delay: 300
+        notify_audit: false
+        notify_no_data: false
+        require_full_window: true
+        silenced: {}
+      query: avg(last_1h):sum:system.net.bytes_rcvd{host:host0} > 100
+      tags: []
+      type: metric alert
+    tyler_test2:
+      message: ' '
+      options:
+        locked: false
+        new_host_delay: 300
+        notify_audit: false
+        notify_no_data: false
+        require_full_window: true
+        silenced: {}
+      query: avg(last_1h):sum:system.net.bytes_rcvd{host:host0} > 100
+      tags: []
+      type: metric alert
+    tyler_test3:
+      message: ' '
+      options:
+        locked: false
+        new_host_delay: 300
+        notify_audit: false
+        notify_no_data: false
+        silenced: {}
+      query: '"process.up".over("environment:prod","process:ssh").by("host","process").last(4).count_by_status()'
+      tags: []
+      type: service check
